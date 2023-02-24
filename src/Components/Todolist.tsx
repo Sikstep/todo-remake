@@ -1,5 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import {FilterType, TasksType} from '../App';
+import s from './Todolist.module.css'
 
 type TodolistType = {
     title: string
@@ -10,9 +11,18 @@ type TodolistType = {
     changeIsDone: (taskID: string, isDoneValue: boolean) => void
 }
 
-export const Todolist: React.FC<TodolistType> = ({tasks, title, deleteTask, addTask, filter, changeIsDone}) => {
+export const Todolist: React.FC<TodolistType> = ({
+                                                     tasks,
+                                                     title,
+                                                     deleteTask,
+                                                     addTask,
+                                                     filter,
+                                                     changeIsDone,
+                                                     ...props
+                                                 }) => {
 
     const [newTitle, setNewTitle] = useState('');
+    const [error, setError] = useState('');
     const onClickDeleteHandler = (id: string) => {
         deleteTask(id)
     }
@@ -23,7 +33,7 @@ export const Todolist: React.FC<TodolistType> = ({tasks, title, deleteTask, addT
             changeIsDone(el.id, e.currentTarget.checked)
         }
         return (
-            <li key={el.id}>
+            <li key={el.id} className={el.isDone ? s.taskIsDone : ''}>
                 <input type="checkbox"
                        checked={el.isDone}
                        onChange={onChangeCheckHandler}/>
@@ -35,10 +45,12 @@ export const Todolist: React.FC<TodolistType> = ({tasks, title, deleteTask, addT
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setNewTitle(e.currentTarget.value)
+        setError('')
     }
 
     const onClickAddHandler = () => {
         if (newTitle.trim() === '') {
+            setError('Input should be filled!')
             setNewTitle('')
             return
         } else {
@@ -51,6 +63,7 @@ export const Todolist: React.FC<TodolistType> = ({tasks, title, deleteTask, addT
         if (e.key === 'Enter') {
             if (newTitle.trim() === '') {
                 setNewTitle('')
+                setError('Input should be filled!')
                 return
             } else {
                 addTask(newTitle.trim())
@@ -71,13 +84,24 @@ export const Todolist: React.FC<TodolistType> = ({tasks, title, deleteTask, addT
         filter('completed')
     }
 
+    const onBlurHandler = () => {
+        if (newTitle.trim() === '') {
+            return setError('Input should be filled!')
+        }
+    }
+
+    let inputError = error ? (`${s.input} ${s.inputError}`) : s.input;
     return (
         <div>
             <h3>{title}</h3>
-            <input value={newTitle}
+            <input className={inputError} value={newTitle}
                    onChange={onChangeHandler}
-                   onKeyDown={onKeyHandler}/>
-            <button onClick={onClickAddHandler}>Add</button>
+                   onKeyDown={onKeyHandler}
+                   onBlur={onBlurHandler}/>
+            <button onClick={onClickAddHandler}
+                    disabled={newTitle.trim() === ''}>Add
+            </button>
+            {error && <div className={s.errorMessage}>{error}</div>}
             <ol>
                 {mappedTasks}
             </ol>

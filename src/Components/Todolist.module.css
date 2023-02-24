@@ -1,0 +1,14 @@
+.errorMessage {
+    font-weight: 700;
+    color: red;
+}
+.input {
+
+}
+
+.inputError {
+    border-color: red;
+}
+.taskIsDone {
+    opacity: 0.5;
+}
