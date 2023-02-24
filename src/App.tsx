@@ -40,7 +40,7 @@ function App() {
     }
 
     const changeIsDone = (taskId: string, isDoneValue: boolean) => {
-            setTasks([...tasks.map( el => el.id === taskId ? {...el, isDone: isDoneValue} : el )])
+        setTasks([...tasks.map(el => el.id === taskId ? {...el, isDone: isDoneValue} : el)])
     }
 
     return (
@@ -51,7 +51,8 @@ function App() {
                 deleteTask={deleteTask}
                 addTask={addNewTask}
                 filter={setFilter}
-                changeIsDone={changeIsDone}/>
+                changeIsDone={changeIsDone}
+                filterValue={filter}/>
         </div>
     );
 }

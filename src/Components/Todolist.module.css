@@ -12,3 +12,7 @@
 .taskIsDone {
     opacity: 0.5;
 }
+
+.buttonActive {
+    background-color: mediumspringgreen;
+}

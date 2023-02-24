@@ -9,6 +9,7 @@ type TodolistType = {
     addTask: (newTitle: string) => void
     filter: (filter: FilterType) => void
     changeIsDone: (taskID: string, isDoneValue: boolean) => void
+    filterValue: FilterType
 }
 
 export const Todolist: React.FC<TodolistType> = ({
@@ -17,7 +18,7 @@ export const Todolist: React.FC<TodolistType> = ({
                                                      deleteTask,
                                                      addTask,
                                                      filter,
-                                                     changeIsDone,
+                                                     changeIsDone, filterValue,
                                                      ...props
                                                  }) => {
 
@@ -91,6 +92,9 @@ export const Todolist: React.FC<TodolistType> = ({
     }
 
     let inputError = error ? (`${s.input} ${s.inputError}`) : s.input;
+    let filteredValueAll = filterValue === 'all' ? s.buttonActive : '';
+    let filteredValueActive = filterValue === 'active' ? s.buttonActive : '';
+    let filteredValueCompleted = filterValue === 'completed' ? s.buttonActive : '';
     return (
         <div>
             <h3>{title}</h3>
@@ -105,9 +109,9 @@ export const Todolist: React.FC<TodolistType> = ({
             <ol>
                 {mappedTasks}
             </ol>
-            <button onClick={filterToAllHandler}>All</button>
-            <button onClick={filterToActiveHandler}>Active</button>
-            <button onClick={filterToCompletedHandler}>Completed</button>
+            <button className={filteredValueAll} onClick={filterToAllHandler}>All</button>
+            <button className={filteredValueActive} onClick={filterToActiveHandler}>Active</button>
+            <button className={filteredValueCompleted} onClick={filterToCompletedHandler}>Completed</button>
         </div>
     );
 };
