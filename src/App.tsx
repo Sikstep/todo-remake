@@ -26,7 +26,7 @@ function App() {
         {id: v1(), title: 'GraphQL', isDone: false},
     ]);
 
-    const [filter, setFilter] = useState<FilterType>('all');
+
 
     const deleteTask = (idTask: string) => {
         setTasks([...tasks.filter(el => el.id !== idTask)])
@@ -35,15 +35,7 @@ function App() {
     const addNewTask = (newTitle: string) => {
         setTasks([{id: v1(), title: newTitle, isDone: false}, ...tasks])
     }
-    let filteredTasks = tasks
 
-    if (filter === 'active') {
-        filteredTasks = tasks.filter(el => !el.isDone)
-    }
-
-    if (filter === 'completed') {
-        filteredTasks = tasks.filter(el => el.isDone)
-    }
 
     const changeIsDone = (taskId: string, isDoneValue: boolean) => {
         setTasks([...tasks.map(el => el.id === taskId ? {...el, isDone: isDoneValue} : el)])
@@ -54,13 +46,24 @@ function App() {
         {id: v1(), title: 'What to buy', filter: 'completed'},
     ]
     let mappedTodoLists = todolists.map(el => {
+
+        let filteredTasks = tasks
+
+        if (el.filter === 'active') {
+            filteredTasks = tasks.filter(el => !el.isDone)
+        }
+
+        if (el.filter === 'completed') {
+            filteredTasks = tasks.filter(el => el.isDone)
+        }
+
         return (
             <Todolist key={el.id}
                 title={el.title}
                 tasks={filteredTasks}
                 deleteTask={deleteTask}
                 addTask={addNewTask}
-                filter={setFilter}
+                filter={() => {}}
                 changeIsDone={changeIsDone}
                 filterValue={el.filter}/>
         )
