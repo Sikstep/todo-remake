@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {Todolist} from './Components/Todolist';
 import {v1} from 'uuid';
+import s from './App.module.css';
 
 export type TasksType = {
     id: string
@@ -44,7 +45,16 @@ function App() {
     }
 
     return (
-        <div className="App">
+        <div className={s.App}>
+            <Todolist
+                title={'Learn list'}
+                tasks={filteredTasks}
+                deleteTask={deleteTask}
+                addTask={addNewTask}
+                filter={setFilter}
+                changeIsDone={changeIsDone}
+                filterValue={filter}/>
+
             <Todolist
                 title={'Learn list'}
                 tasks={filteredTasks}
