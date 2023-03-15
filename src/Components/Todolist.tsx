@@ -2,6 +2,7 @@ import React, {ChangeEvent} from 'react';
 import {FilterType, TasksType} from '../App';
 import s from './Todolist.module.css'
 import {AddItemForm} from './AddItemForm';
+import {EditableSpan} from './EditableSpan';
 
 type TodolistType = {
     todolistID: string
@@ -13,6 +14,8 @@ type TodolistType = {
     changeIsDone: (todolistID: string, taskID: string, isDoneValue: boolean) => void
     filterValue: FilterType
     removeTodolist: (todolistID: string) => void
+    changeTaskTitle: (todolistID: string, taskID: string, newTitle: string) => void
+    changeTodolistTitle: (todolistID: string, newTitle: string) => void
 }
 
 export const Todolist: React.FC<TodolistType> = ({
@@ -33,12 +36,17 @@ export const Todolist: React.FC<TodolistType> = ({
         const onChangeCheckHandler = (e: ChangeEvent<HTMLInputElement>) => {
             changeIsDone(todolistID, el.id, e.currentTarget.checked)
         }
+
+        const changeTastTitle = (newTitle: string) => {
+            props.changeTaskTitle(todolistID, el.id, newTitle)
+        }
+
         return (
             <li key={el.id} className={el.isDone ? s.taskIsDone : ''}>
                 <input type="checkbox"
                        checked={el.isDone}
                        onChange={onChangeCheckHandler}/>
-                {el.title}
+                <EditableSpan title={el.title} changeTaskTitle={changeTastTitle} />
                 <button onClick={() => onClickDeleteHandler(el.id)}>x</button>
             </li>
         )
@@ -64,9 +72,14 @@ export const Todolist: React.FC<TodolistType> = ({
     const addNewTask = (newTitle: string) => {
         addTask(todolistID, newTitle)
     }
+    const changeTodolistTitle = (newTitle: string) => {
+        props.changeTodolistTitle(todolistID, newTitle)
+    }
+
     return (
         <div>
-            <h3>{title}
+            <h3>
+                <EditableSpan title={title} changeTaskTitle={changeTodolistTitle}/>
                 <button onClick={removeTodolistHandler}>X</button>
             </h3>
             <AddItemForm addItem={addNewTask}/>
