@@ -60,12 +60,16 @@ export const Todolist: React.FC<TodolistType> = ({
     let filteredValueAll = filterValue === 'all' ? s.buttonActive : '';
     let filteredValueActive = filterValue === 'active' ? s.buttonActive : '';
     let filteredValueCompleted = filterValue === 'completed' ? s.buttonActive : '';
+
+    const addNewTask = (newTitle: string) => {
+        addTask(todolistID, newTitle)
+    }
     return (
         <div>
             <h3>{title}
                 <button onClick={removeTodolistHandler}>X</button>
             </h3>
-            <AddItemForm addTask={addTask} todolistID={todolistID}/>
+            <AddItemForm addItem={addNewTask}/>
             <ul>
                 {mappedTasks}
             </ul>
