@@ -27,8 +27,8 @@ function App() {
     const todolistID2 = v1();
 
     const [todolists, setTodolists] = useState<TodolistType[]>([
-        {id: todolistID1, title: 'What to learn', filter: 'active'},
-        {id: todolistID2, title: 'What to buy', filter: 'completed'},
+        {id: todolistID1, title: 'What to learn', filter: 'all'},
+        {id: todolistID2, title: 'What to buy', filter: 'all'},
     ]);
 
     const [tasks, setTasks] = useState<TodolistsType>({
@@ -86,6 +86,7 @@ function App() {
         }
 
         return (
+
             <Todolist key={el.id}
                       todolistID={el.id}
                       title={el.title}
@@ -101,6 +102,7 @@ function App() {
 
     return (
         <div className={s.App}>
+            <input /> <button>Add</button>
             {mappedTodoLists}
         </div>
     );

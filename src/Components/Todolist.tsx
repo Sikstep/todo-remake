@@ -1,6 +1,7 @@
-import React, {ChangeEvent, KeyboardEvent, useState, MouseEvent} from 'react';
+import React, {ChangeEvent} from 'react';
 import {FilterType, TasksType} from '../App';
 import s from './Todolist.module.css'
+import {AddItemForm} from './AddItemForm';
 
 type TodolistType = {
     todolistID: string
@@ -25,13 +26,9 @@ export const Todolist: React.FC<TodolistType> = ({
                                                      ...props
                                                  }) => {
 
-    const [newTitle, setNewTitle] = useState('');
-    const [error, setError] = useState('');
     const onClickDeleteHandler = (id: string) => {
         deleteTask(todolistID, id)
     }
-
-
     const mappedTasks = tasks.map(el => {
         const onChangeCheckHandler = (e: ChangeEvent<HTMLInputElement>) => {
             changeIsDone(todolistID, el.id, e.currentTarget.checked)
@@ -46,78 +43,32 @@ export const Todolist: React.FC<TodolistType> = ({
             </li>
         )
     })
-
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setNewTitle(e.currentTarget.value)
-        setError('')
-    }
-
-    const onClickAddHandler = () => {
-        if (newTitle.trim() === '') {
-            setError('Input should be filled!')
-            setNewTitle('')
-            return
-        } else {
-            addTask(todolistID ,newTitle.trim())
-            setNewTitle('')
-        }
-    }
-
-    const onKeyHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            if (newTitle.trim() === '') {
-                setNewTitle('')
-                setError('Input should be filled!')
-                return
-            } else {
-                addTask(todolistID ,newTitle.trim())
-                setNewTitle('')
-            }
-        }
-    }
-
     const filterToAllHandler = () => {
-        filter(todolistID,'all')
+        filter(todolistID, 'all')
     }
-
     const filterToActiveHandler = () => {
-        filter(todolistID,'active')
+        filter(todolistID, 'active')
     }
-
     const filterToCompletedHandler = () => {
-        filter(todolistID,'completed')
+        filter(todolistID, 'completed')
     }
-
-    const onBlurHandler = () => {
-        if (newTitle.trim() === '') {
-            return setError('Input should be filled!')
-        }
-    }
-
     const removeTodolistHandler = () => {
         props.removeTodolist(todolistID)
     }
 
-    let inputError = error ? (`${s.input} ${s.inputError}`) : s.input;
+
     let filteredValueAll = filterValue === 'all' ? s.buttonActive : '';
     let filteredValueActive = filterValue === 'active' ? s.buttonActive : '';
     let filteredValueCompleted = filterValue === 'completed' ? s.buttonActive : '';
     return (
         <div>
-            <div className={s.todolist_title}><h3>{title}</h3>
+            <h3>{title}
                 <button onClick={removeTodolistHandler}>X</button>
-            </div>
-            <input className={inputError} value={newTitle}
-                   onChange={onChangeHandler}
-                   onKeyDown={onKeyHandler}
-                   onBlur={onBlurHandler}/>
-            <button onClick={onClickAddHandler}
-                    disabled={newTitle.trim() === ''}>Add
-            </button>
-            {error && <div className={s.errorMessage}>{error}</div>}
-            <ol>
+            </h3>
+            <AddItemForm addTask={addTask} todolistID={todolistID}/>
+            <ul>
                 {mappedTasks}
-            </ol>
+            </ul>
             <button className={filteredValueAll} onClick={filterToAllHandler}>All</button>
             <button className={filteredValueActive} onClick={filterToActiveHandler}>Active</button>
             <button className={filteredValueCompleted} onClick={filterToCompletedHandler}>Completed</button>
